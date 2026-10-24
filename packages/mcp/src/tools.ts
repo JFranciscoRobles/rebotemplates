@@ -9,7 +9,7 @@ import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path'
 import { exportDocx, importDocx } from '@rebodocs/core';
 import { type Inspection, type Missing, check, inspect, loadTemplate, render } from '@rebotemplates/core';
 import { toPdf } from '@rebotemplates/pdf';
-import { type ConditionMark, type RowMark, type VariableMark, markTemplate, templateText } from './make';
+import { type ConditionMark, type ListMark, type RowMark, type VariableMark, markTemplate, templateText } from './make';
 
 export interface Context {
   /** The folder of templates; relative paths start here. */
@@ -218,7 +218,7 @@ export const TOOLS: Tool[] = [
     name: 'make_template',
     title: 'Turn a document into a template',
     description:
-      'Turns a finished .docx (an invoice, a contract) into a template, written as a new file; the document itself is not changed. Each change is found by its exact text: texts that become {{variables}}, a row of a table that repeats for each item of a list (its other rows taken out), and paragraphs kept only when a value is there. Read the document first and propose the changes to the person; with dry_run, nothing is written and the template is shown.',
+      'Turns a finished .docx (an invoice, a contract) into a template, written as a new file; the document itself is not changed. Each change is found by its exact text: texts that become {{variables}}, a row of a table or paragraphs that repeat for each item of a list (the other items taken out), and paragraphs or text kept only when a value is there. Read the document first and propose the changes to the person; with dry_run, nothing is written and the template is shown.',
     properties: {
       source: { type: 'string', description: 'The finished document, from the folder: "invoice-0142.docx".' },
       output: { type: 'string', description: 'The template to write, from the folder: "invoice.docx".' },
@@ -232,6 +232,7 @@ export const TOOLS: Tool[] = [
             variable: { type: 'string', description: 'The variable: "client.name".' },
             format: { type: 'string', description: 'A format: "currency", "long date", "upper".' },
             first: { type: 'boolean', description: 'Only where it first appears.' },
+            in: { type: 'string', description: 'A longer text it is inside, to tell it from the same text elsewhere: "3" in "for 3 years".' },
           },
           required: ['find', 'variable'],
         },
@@ -258,12 +259,41 @@ export const TOOLS: Tool[] = [
           required: ['find', 'list', 'fields'],
         },
       },
-      conditions: {
+      lists: {
         type: 'array',
-        description: 'Paragraphs kept only when a value is there (or, with unless, when it is not).',
+        description: 'Paragraphs that become the ones repeated for each item of a list: a list of deliverables, of clauses.',
         items: {
           type: 'object',
-          properties: { find: { type: 'string', description: 'A text in the paragraph: "PAID".' }, when: { type: 'string', description: 'The value: "paid".' }, unless: { type: 'boolean' } },
+          properties: {
+            find: { type: 'string', description: 'A text in the (first) paragraph of the item to keep and repeat: "A brand guide".' },
+            to: { type: 'string', description: 'A text in its last paragraph, when an item is several.' },
+            list: { type: 'string', description: 'The list: "deliverables".' },
+            fields: {
+              type: 'array',
+              description: 'Texts of those paragraphs that become fields of each item.',
+              items: {
+                type: 'object',
+                properties: { find: { type: 'string' }, field: { type: 'string', description: '"name", "due".' }, format: { type: 'string' } },
+                required: ['find', 'field'],
+              },
+            },
+            remove: { type: 'array', items: { type: 'string' }, description: 'A text in each paragraph of the other items, to take them out.' },
+          },
+          required: ['find', 'list', 'fields'],
+        },
+      },
+      conditions: {
+        type: 'array',
+        description: 'Paragraphs, or a text inside one, kept only when a value is there (or, with unless, when it is not).',
+        items: {
+          type: 'object',
+          properties: {
+            find: { type: 'string', description: 'A text in the paragraph: "PAID"; with inline, the text itself: " each month".' },
+            when: { type: 'string', description: 'The value: "paid".' },
+            unless: { type: 'boolean', description: 'Kept when the value is not there.' },
+            to: { type: 'string', description: 'A text in the last paragraph, when what depends on the value is several: a clause with its heading.' },
+            inline: { type: 'boolean', description: 'Only the text found, inside its paragraph.' },
+          },
           required: ['find', 'when'],
         },
       },
@@ -283,6 +313,7 @@ export const TOOLS: Tool[] = [
       const made = markTemplate(importDocx(new Uint8Array(readFileSync(source))), {
         variables: list<VariableMark>('variables'),
         rows: list<RowMark>('rows'),
+        lists: list<ListMark>('lists'),
         conditions: list<ConditionMark>('conditions'),
       });
       if (!made.done.length) throw new ToolError(['Nothing was found to change.', ...made.missed].join('\n'));

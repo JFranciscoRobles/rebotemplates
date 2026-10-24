@@ -132,7 +132,7 @@ The same rules:
 
 Taken on October 24, 2026, by running `npm test`, every one passing:
 
-- `packages/mcp` · 11 · The protocol, listing, inspecting with data to fill in, checking, rendering a .docx and a PDF, paths outside the folder refused, a finished invoice turned into a template that makes the same documents as the one it came from, what is not found said.
+- `packages/mcp` · 12 · The protocol, listing, inspecting with data to fill in, checking, rendering a .docx and a PDF, paths outside the folder refused, a finished invoice and a finished contract each turned into a template that makes the same documents as the one it came from, what is not found said.
 - `packages/core` · 15 · Values missing (marked, empty, kept, a whole object, a block), 0 and false as values, computed values for each item and for the whole, lists inside lists, dates, `check` (a whole object missing included), `inspect`, a template read once.
 - `packages/pdf` · 2 · The invoice as a PDF, and the families no font was found for.
 - `packages/cli` · 6 · `inspect`, `check`, `render` from stdin, one document per line, `--strict`, names of files.
@@ -230,8 +230,9 @@ Built before 0.2, which waits on Rebodocs.
 10. ✅ **`mcp`:** a folder of templates: list, inspect, check, render.
 11. ✅ **A `.docx` turned into a template:** the assistant reads it, proposes
     which texts are variables, and marks them; the person sees the changes
-    before they are kept (`dry_run`), and the template is a new file. A row
-    of a table repeats; paragraphs of a list do not yet.
+    before they are kept (`dry_run`), and the template is a new file. Rows
+    of a table and paragraphs repeat; a clause of several paragraphs, or a
+    text inside one, is kept by a value.
 
 ### 0.4.0 · Where it runs
 

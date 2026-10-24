@@ -14,8 +14,8 @@ export const TESTS: { where: string; count: number; what: string }[] = [
   },
   {
     where: 'packages/mcp',
-    count: 11,
-    what: 'The protocol; listing, inspecting, checking and rendering; paths outside the folder refused; a finished invoice turned into a template that makes the same documents.',
+    count: 12,
+    what: 'The protocol; listing, inspecting, checking and rendering; paths outside the folder refused; a finished invoice and a finished contract turned into templates that make the same documents.',
   },
   {
     where: 'test-templates',

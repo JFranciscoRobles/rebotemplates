@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { docText, importDocx } from '@rebodocs/core';
 import { render } from '@rebotemplates/core';
+import { contract, contractData } from '../../../test-templates/contract';
 import { invoice, invoiceComputed, invoiceData } from '../../../test-templates/invoice';
 import { type Message, createTemplateServer } from '../src/server';
 
@@ -26,6 +27,7 @@ beforeAll(() => {
   // A finished invoice, as a person has one before there is a template: no variables in it.
   const finished = render(invoice(), { ...invoiceData(), number: '0142', paid: true }, { computed: invoiceComputed, locale: 'en-US', currency: 'USD' });
   writeFileSync(join(dir, 'invoice-0142.docx'), finished.docx);
+  writeFileSync(join(dir, 'contract-lumen.docx'), render(contract(), contractData(), { locale: 'en-US', currency: 'USD' }).docx);
   server = createTemplateServer({ dir });
 });
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -49,6 +51,7 @@ describe('a folder of templates', () => {
     const { text } = await call('list_templates', {});
     expect(text).toContain('invoice.docx — 10 variables, 2 blocks');
     expect(text).toContain('invoice-0142.docx — 0 variables, 0 blocks');
+    expect(text).toContain('contract-lumen.docx — 0 variables, 0 blocks');
   });
 
   it('gives data of the shape a template asks for', async () => {
@@ -154,5 +157,59 @@ describe('a finished document turned into a template', () => {
 
   it('never writes over the document it came from', async () => {
     expect(await call('make_template', { source: 'invoice-0142.docx', output: 'invoice-0142.docx', variables: [{ find: 'Monterrey', variable: 'city' }] })).toMatchObject({ error: true });
+  });
+});
+
+describe('a finished contract turned into a template', () => {
+  it('repeats paragraphs for each item, keeps a clause of several paragraphs and a text inside one by a value, and tells a number from the same elsewhere', async () => {
+    const { text, error } = await call('make_template', {
+      source: 'contract-lumen.docx',
+      output: 'made/contract.docx',
+      lists: [
+        {
+          find: 'A brand guide',
+          list: 'deliverables',
+          fields: [
+            { find: 'A brand guide', field: 'name' },
+            { find: 'November 15, 2026', field: 'due', format: 'long date' },
+          ],
+          remove: ['Templates for invoices and letters'],
+        },
+      ],
+      conditions: [
+        { find: ' each month', when: 'monthly', inline: true },
+        { find: '3. Confidentiality', to: 'information confidential', when: 'confidential' },
+        { find: 'may hire other providers', when: 'exclusive', unless: true },
+      ],
+      variables: [
+        { find: 'ACME LTD.', variable: 'provider.name', format: 'upper' },
+        { find: 'STUDIO LUMEN', variable: 'client.name', format: 'upper' },
+        { find: 'October 24, 2026', variable: 'signed', format: 'long date' },
+        { find: '$1,180.00', variable: 'fee', format: 'currency' },
+        { find: '3', in: 'for 3 years', variable: 'confidential.years' },
+      ],
+    });
+    expect(error).toBe(false);
+    expect(text).not.toContain('Not found:');
+    const made = new Uint8Array(readFileSync(join(dir, 'made/contract.docx')));
+    const options = { locale: 'en-US', currency: 'USD' };
+    // Other values, the same shape: the contract the template makes is the one the original template makes.
+    const data = {
+      ...contractData(),
+      provider: { name: 'Globex' },
+      client: { name: 'Casa Rivera' },
+      signed: '2027-01-10',
+      fee: 2400,
+      confidential: { years: 5 },
+      deliverables: [
+        { name: 'An audit', due: '2027-02-01' },
+        { name: 'A report', due: '2027-03-01' },
+        { name: 'A workshop', due: '2027-03-15' },
+      ],
+    };
+    expect(textOf(render(made, data, options).docx)).toBe(textOf(render(contract(), data, options).docx));
+    // And with the values that leave things out.
+    const without = { ...data, monthly: false, confidential: false, deliverables: [] };
+    expect(textOf(render(made, without, options).docx)).toBe(textOf(render(contract(), without, options).docx));
   });
 });

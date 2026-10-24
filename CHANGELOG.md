@@ -57,6 +57,13 @@ Takes `@rebodocs/core` 0.10.
   `dry_run` shows it first. JSON-RPC over standard input and output, as
   Rebodocs' server speaks it, with no SDK. `npm run mcp -- --dir folder`.
 
+- **`make_template` makes lists of paragraphs**, as it makes rows of a
+  table: `lists` repeats one paragraph or several (`to`) for each item, the
+  other items taken out. A condition may hold several paragraphs (`to`) or a
+  text inside one (`inline`), and a variable may be told from the same text
+  elsewhere by a longer one around it (`in`). A finished contract turned into
+  a template makes the same contracts as the one it came from.
+
 ### Changed
 
 - A block the data names as `null`, `false` or `''` is no longer said to be

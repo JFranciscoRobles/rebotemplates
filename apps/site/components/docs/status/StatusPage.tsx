@@ -55,7 +55,6 @@ const ASKED: [string, string][] = [
 
 const ROADMAP: [string, string][] = [
   ['Publishing 0.1 to npm,', 'with the MCP server of 0.3 in it.'],
-  ['Paragraphs that repeat, made from a document:', 'make_template turns a row of a table into one that repeats; a list of clauses or deliverables next.'],
   ['Pictures, in Rebodocs first:', '{{logo | image}} in the engine, shown and filled in the Rebodocs editor too; the letter of the tests gets its logo. 0.2.'],
   [
     'Where it runs, measured:',
