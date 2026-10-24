@@ -99,6 +99,10 @@ describe('check', () => {
     ]);
   });
 
+  it('says a value missing inside an object the data does not have, as render does', () => {
+    expect(check(template('{{client.name}} of {{client.city}}'), {}).missing).toEqual(['client.name', 'client.city']);
+  });
+
   it('is happy with the invoice and its computed values', () => {
     expect(check(invoice(), invoiceData(), { computed: invoiceComputed })).toEqual({ ok: true, missing: [], problems: [] });
   });

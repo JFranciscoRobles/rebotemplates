@@ -56,3 +56,8 @@ Takes `@rebodocs/core` 0.10.
   its own: each package's `dist/` is the package, with its types, and was
   installed from its tarball in an empty project and used there.
 
+### Fixed
+
+- **`check` and a whole object missing.** A value inside an object the data
+  does not have (`client.name` with no `client`) is said to be missing by
+  `check` too, as `render` already said it.

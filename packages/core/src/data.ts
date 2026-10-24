@@ -87,7 +87,9 @@ export function prepare(given: Record<string, unknown>, names: string[], blocks:
     const last = path[path.length - 1];
     // A name inside a block of its own items ({{tags}} in {{#tags}}) is the item itself, not a field.
     if (blocks.includes(name)) continue;
-    for (const { holder, where } of holders(data, path, missing !== 'keep' && !blocks.some((block) => name.startsWith(`${block}.`)))) {
+    // Objects missing on the way are made, in this copy of the data, so a value missing inside one is said too, whatever is
+    // done with it; not inside a block, whose items are what the data gives.
+    for (const { holder, where } of holders(data, path, !blocks.some((block) => name.startsWith(`${block}.`)))) {
       if (!isAbsent(holder[last])) continue;
       lacking.push(where ? `${where}.${last}` : last);
       if (missing === 'mark') holder[last] = `[${name}]`;
