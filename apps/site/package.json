@@ -1,0 +1,26 @@
+{
+  "name": "@rebotemplates/site",
+  "version": "0.1.0",
+  "description": "The landing page of ReboTemplates, with the demo in it.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fonts": "node scripts/fonts.mjs",
+    "dev": "npm run fonts && next dev -p 5192",
+    "build": "npm run fonts && next build",
+    "start": "npx serve out -l 5192"
+  },
+  "dependencies": {
+    "@rebodocs/core": "~0.10.0",
+    "@rebotemplates/core": "0.1.0",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "shiki": "^4.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

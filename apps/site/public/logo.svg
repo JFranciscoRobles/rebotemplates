@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <title>ReboTemplates</title>
+  <rect width="32" height="32" rx="7" fill="#c2540a"/>
+  <path d="M10 6.5h8.2L23 11.3V24a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 9 24V8a1.5 1.5 0 0 1 1-1.5Z" fill="#fff"/>
+  <path d="M14.2 14c-1.2 0-1.2 1-1.2 1.8s-.7 1.2-1.2 1.2c.5 0 1.2.4 1.2 1.2s0 1.8 1.2 1.8M17.8 14c1.2 0 1.2 1 1.2 1.8s.7 1.2 1.2 1.2c-.5 0-1.2.4-1.2 1.2s0 1.8-1.2 1.8" stroke="#c2540a" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

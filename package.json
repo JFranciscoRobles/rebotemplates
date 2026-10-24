@@ -1,0 +1,46 @@
+{
+  "name": "rebotemplates",
+  "version": "0.1.0",
+  "description": "A document generator: a template written in Word, data as JSON, and back a .docx or a PDF. Uses the Rebodocs engine inside.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "demo": "npm run dev -w @rebotemplates/demo",
+    "build:demo": "npm run build -w @rebotemplates/demo",
+    "site": "npm run dev -w @rebotemplates/site",
+    "build:site": "npm run build -w @rebotemplates/site",
+    "test": "vitest run --project node",
+    "coverage": "vitest run --project node --coverage --coverage.include='packages/*/src/**'",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p apps/demo",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "bench": "vite-node tools/bench.ts",
+    "cli": "vite-node tools/cli.ts --",
+    "sample": "vite-node tools/sample.ts --",
+    "size": "vite-node tools/size.ts",
+    "build:packages": "npm run build -w @rebotemplates/core -w @rebotemplates/pdf -w @rebotemplates/cli"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^5.0.5",
+    "fflate": "^0.8.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vite-node": "^6.0.0",
+    "vitest": "^5.0.5"
+  }
+}

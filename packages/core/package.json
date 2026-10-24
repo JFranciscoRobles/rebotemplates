@@ -1,0 +1,17 @@
+{
+  "name": "@rebotemplates/core",
+  "version": "0.1.0",
+  "description": "Fill a Word template with JSON and get a .docx back: render, inspect and check, with values computed in code. Uses the Rebodocs engine inside.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@rebodocs/core": "~0.10.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  }
+}
