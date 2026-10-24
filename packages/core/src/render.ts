@@ -3,6 +3,7 @@
 
 import { type Doc, exportDocx, fillVariables, variableProblems } from '@rebodocs/core';
 import { type Computed, type Missing, prepare } from './data';
+import { resolvePictures } from './pictures';
 import { type TemplateSource, loadTemplate } from './template';
 
 export interface RenderOptions {
@@ -36,8 +37,9 @@ export interface Filled {
 /** The template filled, as a document still: for `render`, `toPdf`, or anything else Rebodocs does with one. */
 export function fill(source: TemplateSource, data: Record<string, unknown>, options: RenderOptions = {}): Filled {
   const template = loadTemplate(source);
+  // Pictures given as bytes become data: addresses, which Rebodocs takes.
   const prepared = prepare(
-    data,
+    template.pictures.length ? resolvePictures(template, data) : data,
     template.names,
     template.blocks.map((block) => block.name),
     options.computed,
@@ -75,7 +77,7 @@ export interface Check {
 export function check(source: TemplateSource, data: Record<string, unknown>, options: Omit<RenderOptions, 'missing'> = {}): Check {
   const template = loadTemplate(source);
   const prepared = prepare(
-    data,
+    template.pictures.length ? resolvePictures(template, data) : data,
     template.names,
     template.blocks.map((block) => block.name),
     options.computed,

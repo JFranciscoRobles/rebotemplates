@@ -64,6 +64,18 @@ Takes `@rebodocs/core` 0.10.
   elsewhere by a longer one around it (`in`). A finished contract turned into
   a template makes the same contracts as the one it came from.
 
+- **Pictures**, `{{logo | image}}`, made in Rebodocs first: they need the
+  `@rebodocs/core` that comes after 0.10. Here, a picture may be given as its
+  bytes, which `render` and `check` turn into a `data:` address;
+  `resolvePictures` loads them from paths (or anything else, with a loader of
+  one's own) and `fetchPictures` from the web. `inspect` says which variables
+  are pictures. The command line reads a picture by its path, from the folder
+  of the data, or fetches its address; the MCP server reads it by its path in
+  its folders, and fetches nothing. A value that is not a picture is said
+  as such. `test-templates/badge.ts`: a logo in the header and a photo in
+  each row. `REBODOCS=../docs npm test` runs the tests on a checkout of
+  Rebodocs.
+
 ### Changed
 
 - A block the data names as `null`, `false` or `''` is no longer said to be

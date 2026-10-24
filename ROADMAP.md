@@ -132,6 +132,7 @@ The same rules:
 
 Taken on October 24, 2026, by running `npm test`, every one passing:
 
+- `test-templates/badge` · 3, of which 2 need Rebodocs with pictures and run on its checkout · The logo in the header and a photo in each row, from their bytes, paths or addresses; a picture that is not one said.
 - `packages/mcp` · 12 · The protocol, listing, inspecting with data to fill in, checking, rendering a .docx and a PDF, paths outside the folder refused, a finished invoice and a finished contract each turned into a template that makes the same documents as the one it came from, what is not found said.
 - `packages/core` · 15 · Values missing (marked, empty, kept, a whole object, a block), 0 and false as values, computed values for each item and for the whole, lists inside lists, dates, `check` (a whole object missing included), `inspect`, a template read once.
 - `packages/pdf` · 2 · The invoice as a PDF, and the families no font was found for.
@@ -176,7 +177,7 @@ Known from the start, as they are Rebodocs':
 
 What ReboTemplates needs and `@rebodocs/core` does not have in its public API:
 
-- **`{{name | image}}`**, for 0.2.
+- ~~**`{{name | image}}`**~~, written there; to be published.
 - **The font families a document uses**, as `resolveRun` knows them (it is
   internal), so a PDF is laid out once.
 - **A format of colour**, to mark a value missing in pink as the demo does.
@@ -217,11 +218,19 @@ in `apps/site/lib/home.ts` (CONTRIBUTING.md, "Publishing").
 
 ### 0.2.0 · Pictures, in Rebodocs first
 
-8. **`{{name | image}}`** in `@rebodocs/core`: bytes, `data:` addresses, and
-   addresses fetched when asked; a width; one per row in a block. Shown and
-   filled in the Rebodocs editor too.
-9. ReboTemplates takes that version of Rebodocs; the letter of
-   `test-templates/` gets its logo.
+8. ✅ **`{{name | image}}`** in `@rebodocs/core` (`fillimages.ts` there): its
+   value a `data:` address; a width (`image: 4cm`) or its own size, never
+   wider than the text; one per item of a block; in headers and footers; the
+   same picture kept once. Filled in the Rebodocs editor too, as it fills
+   with the same function. Written and tested in Rebodocs, not published.
+9. ✅ **ReboTemplates' side:** bytes, paths and addresses on the web made
+   into `data:` addresses (`resolvePictures`, `fetchPictures`), in the
+   command line and the MCP server; `test-templates/badge.ts`. Its tests
+   run on a checkout of Rebodocs (`REBODOCS=../docs npm test`) and are
+   skipped on the release.
+
+What is left: Rebodocs published with pictures, `@rebodocs/core` asked for
+at that version here, and "Coming in 0.2" taken off the landing's Images.
 
 ### 0.3.0 · Assistants
 

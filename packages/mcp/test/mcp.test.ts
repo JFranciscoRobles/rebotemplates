@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { docText, importDocx } from '@rebodocs/core';
 import { render } from '@rebotemplates/core';
+import { formatValue } from '@rebodocs/core';
+import { badge, pixel } from '../../../test-templates/badge';
 import { contract, contractData } from '../../../test-templates/contract';
 import { invoice, invoiceComputed, invoiceData } from '../../../test-templates/invoice';
 import { type Message, createTemplateServer } from '../src/server';
@@ -211,5 +213,21 @@ describe('a finished contract turned into a template', () => {
     // And with the values that leave things out.
     const without = { ...data, monthly: false, confidential: false, deliverables: [] };
     expect(textOf(render(made, without, options).docx)).toBe(textOf(render(contract(), without, options).docx));
+  });
+});
+
+describe.skipIf(!formatValue('x', ['image']).problems.every((problem) => problem.kind !== 'format'))('pictures through MCP', () => {
+  it('reads pictures by their paths in the folder, and not outside it', async () => {
+    writeFileSync(join(dir, 'badge.docx'), badge());
+    writeFileSync(join(dir, 'logo.png'), pixel('orange'));
+    writeFileSync(join(dir, 'ana.png'), pixel('green'));
+    const inspected = await call('inspect_template', { template: 'badge.docx' });
+    expect(inspected.text).toContain('{{logo | image: 3cm}} — a picture');
+    expect(inspected.text).toContain('"logo": "path/to/picture.png"');
+    const data = { team: 'Design', logo: 'logo.png', people: [{ name: 'Ana', role: 'Lead', photo: 'ana.png' }] };
+    expect((await call('check_data', { template: 'badge.docx', data })).text).toBe('Everything the template asks for is there.');
+    expect((await call('render_document', { template: 'badge.docx', data, output: 'out/badge.docx' })).text).toBe('Written: out/badge.docx.');
+    const outside = await call('check_data', { template: 'badge.docx', data: { ...data, logo: '../../etc/logo.png' } });
+    expect(outside.text).toContain('logo is not a picture');
   });
 });

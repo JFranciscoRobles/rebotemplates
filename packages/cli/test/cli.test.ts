@@ -2,7 +2,8 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { docText, importDocx } from '@rebodocs/core';
+import { docText, formatValue, importDocx } from '@rebodocs/core';
+import { badge, pixel } from '../../../test-templates/badge';
 import { invoice, invoiceData } from '../../../test-templates/invoice';
 import { nameFor, run } from '../src/main';
 
@@ -54,5 +55,21 @@ describe('the command line', () => {
 
   it('names files with the fields of each document, and nothing a file system refuses', () => {
     expect(nameFor('out/{client.name}-{number}.pdf', { number: 7, client: { name: 'A/B' } })).toBe('out/A-B-7.pdf');
+  });
+});
+
+describe.skipIf(!formatValue('x', ['image']).problems.every((problem) => problem.kind !== 'format'))('pictures from the command line', () => {
+  it('reads a picture by its path, from the folder of the data, and says one that is not a picture', async () => {
+    await writeFile(at('logo.png'), pixel('orange'));
+    await writeFile(at('photo.png'), pixel('green'));
+    await writeFile(at('badge.docx'), badge());
+    await writeFile(at('team.json'), JSON.stringify({ team: 'Design', logo: 'logo.png', people: [{ name: 'Ana', role: 'Lead', photo: 'photo.png' }] }));
+    expect(await run(['check', at('badge.docx'), at('team.json')])).toMatchObject({ code: 0 });
+    const made = await run(['render', at('badge.docx'), at('team.json'), '-o', at('badge-out.docx')]);
+    expect(made.code).toBe(0);
+    expect(Object.keys(importDocx(new Uint8Array(await readFile(at('badge-out.docx')))).header!.paragraphs[0].runs.filter((r) => r.props.object))).toHaveLength(1);
+    await writeFile(at('wrong.json'), JSON.stringify({ team: 'Design', logo: 'nowhere.png', people: [] }));
+    const wrong = await run(['check', at('badge.docx'), at('wrong.json')]);
+    expect(wrong.out).toContain('logo is not a picture');
   });
 });

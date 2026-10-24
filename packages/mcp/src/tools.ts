@@ -7,7 +7,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { exportDocx, importDocx } from '@rebodocs/core';
-import { type Inspection, type Missing, check, inspect, loadTemplate, render } from '@rebotemplates/core';
+import { type Inspection, type Missing, type Template, check, inspect, loadTemplate, render, resolvePictures } from '@rebotemplates/core';
 import { toPdf } from '@rebotemplates/pdf';
 import { type ConditionMark, type ListMark, type RowMark, type VariableMark, markTemplate, templateText } from './make';
 
@@ -79,6 +79,27 @@ function templatesIn(dir: string): string[] {
   return out.sort();
 }
 
+/** The data with its pictures read from the folders: a path to a PNG, a JPEG or a GIF inside them. Addresses on the web are not fetched. */
+function withPictures(context: Context, template: Template, data: Record<string, unknown>): Record<string, unknown> {
+  return resolvePictures(template, data, (value) => {
+    if (!/\.(png|jpe?g|gif)$/i.test(value)) return undefined;
+    try {
+      const path = pathIn(context, value, ['.png', '.jpg', '.jpeg', '.gif']);
+      return existsSync(path) ? new Uint8Array(readFileSync(path)) : undefined;
+    } catch {
+      return undefined;
+    }
+  });
+}
+
+/** A problem as an assistant reads it; a picture that is not one, with what a picture may be given as. */
+const problemText = (problem: { name: string; format: string; kind: string }, template: Template) =>
+  problem.kind === 'format'
+    ? `No format "${problem.format}" (in {{${problem.name}}})`
+    : template.pictures.includes(problem.name)
+      ? `${problem.name} is not a picture: give the path of a PNG, a JPEG or a GIF in the folder, or a data: address`
+      : `${problem.name} cannot be written as ${problem.format}`;
+
 /** Data of the shape a template asks for, to fill in: what an assistant sends render_document. */
 export function exampleData(found: Inspection): Record<string, unknown> {
   const data: Record<string, unknown> = {};
@@ -102,7 +123,7 @@ export function exampleData(found: Inspection): Record<string, unknown> {
   for (const variable of found.variables) {
     if (variable.computed) continue;
     const kind = variable.formats.join(' ');
-    place(variable.name, /currency|number|moneda|número/.test(kind) ? 0 : /date|fecha/.test(kind) ? 'YYYY-MM-DD' : 'text');
+    place(variable.name, variable.picture ? 'path/to/picture.png' : /currency|number|moneda|número/.test(kind) ? 0 : /date|fecha/.test(kind) ? 'YYYY-MM-DD' : 'text');
   }
   return data;
 }
@@ -110,7 +131,7 @@ export function exampleData(found: Inspection): Record<string, unknown> {
 const DATA = {
   type: 'object',
   description:
-    'The values, by the names the template uses: { "client": { "name": "Ana" } } fills {{client.name}}; a list fills a block, each item an object whose fields fill {{items.name}}; true or false keeps a block or leaves it out. Dates as YYYY-MM-DD, numbers plain (1234.5): the formats write them out. inspect_template gives data of the right shape to fill in.',
+    'The values, by the names the template uses: { "client": { "name": "Ana" } } fills {{client.name}}; a list fills a block, each item an object whose fields fill {{items.name}}; true or false keeps a block or leaves it out. Dates as YYYY-MM-DD, numbers plain (1234.5): the formats write them out. A picture ({{logo | image}}) as the path of a PNG, a JPEG or a GIF in the folder. inspect_template gives data of the right shape to fill in.',
   additionalProperties: true,
 };
 const FORMATS = {
@@ -152,7 +173,9 @@ export const TOOLS: Tool[] = [
       const KIND = { text: 'some text', row: 'a row of a table', paragraphs: 'paragraphs' };
       return [
         'Variables:',
-        ...found.variables.map((v) => `  {{${[v.name, ...v.formats].join(' | ')}}}${v.block ? ` — a field of each item of ${v.block}` : ''}${v.uses > 1 ? ` — used ${v.uses}×` : ''}`),
+        ...found.variables.map(
+          (v) => `  {{${[v.name, ...v.formats].join(' | ')}}}${v.picture ? ' — a picture' : ''}${v.block ? ` — a field of each item of ${v.block}` : ''}${v.uses > 1 ? ` — used ${v.uses}×` : ''}`,
+        ),
         ...(found.blocks.length
           ? [
               'Blocks:',
@@ -174,12 +197,10 @@ export const TOOLS: Tool[] = [
     required: ['template', 'data'],
     annotations: { readOnlyHint: true },
     run(context, args) {
-      const result = check(readTemplate(context, text(args, 'template')), object(args, 'data'), { locale: optional(args, 'locale'), currency: optional(args, 'currency') });
+      const template = readTemplate(context, text(args, 'template'));
+      const result = check(template, withPictures(context, template, object(args, 'data')), { locale: optional(args, 'locale'), currency: optional(args, 'currency') });
       if (result.ok) return 'Everything the template asks for is there.';
-      return [
-        ...result.missing.map((path) => `Missing: ${path}`),
-        ...result.problems.map((p) => (p.kind === 'format' ? `No format "${p.format}" (in {{${p.name}}})` : `${p.name} cannot be written as ${p.format}`)),
-      ].join('\n');
+      return [...result.missing.map((path) => `Missing: ${path}`), ...result.problems.map((p) => problemText(p, template))].join('\n');
     },
   },
   {
@@ -202,14 +223,14 @@ export const TOOLS: Tool[] = [
       const output = pathIn(context, text(args, 'output'), ['.docx', '.pdf']);
       if (existsSync(output) && args.overwrite !== true) throw new ToolError(`${shown(context, output)} is there already. Give another output, or overwrite: true.`);
       const options = { locale: optional(args, 'locale'), currency: optional(args, 'currency'), missing: (optional(args, 'missing') ?? 'mark') as Missing };
-      const data = object(args, 'data');
+      const data = withPictures(context, template, object(args, 'data'));
       const made = extname(output).toLowerCase() === '.pdf' ? toPdf(template, data, { ...options, fonts: context.fonts }) : render(template, data, options);
       mkdirSync(dirname(output), { recursive: true });
       writeFileSync(output, 'pdf' in made ? made.pdf : made.docx);
       return [
         `Written: ${shown(context, output)}.`,
         ...(made.missing.length ? [`Missing, marked in it: ${made.missing.join(', ')}.`] : []),
-        ...made.problems.map((p) => `${p.name}: ${p.kind === 'format' ? `no format "${p.format}"` : `could not be written as ${p.format}`}.`),
+        ...made.problems.map((p) => `${problemText(p, template)}.`),
         ...('missingFonts' in made && made.missingFonts.length ? [`No font found for ${made.missingFonts.join(', ')}: another was used.`] : []),
       ].join('\n');
     },

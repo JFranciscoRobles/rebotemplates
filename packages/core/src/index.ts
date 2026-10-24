@@ -5,3 +5,4 @@
 export { type Template, type TemplateSource, type Inspection, type VariableInfo, loadTemplate, inspect } from './template';
 export { type RenderOptions, type Rendered, type Filled, type Problem, type Check, render, fill, check } from './render';
 export type { Computed, Missing } from './data';
+export { isPicture, pictureAddress, pictureNames, resolvePictures, fetchPictures } from './pictures';

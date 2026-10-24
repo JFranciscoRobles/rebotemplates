@@ -11,10 +11,10 @@
 // function that answers with the text to print and the exit code, so the
 // tests run it without a process of its own.
 
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { type Computed, type Missing, check, inspect, loadTemplate, render } from '@rebotemplates/core';
+import { type Computed, type Missing, check, fetchPictures, inspect, loadTemplate, render, resolvePictures } from '@rebotemplates/core';
 import { toPdf } from '@rebotemplates/pdf';
 
 export const USAGE = `Usage:
@@ -30,7 +30,8 @@ Options:
   --strict                 fail when a value is missing or a format cannot write one
   --computed file.mjs      a module whose default export is the computed values
   --fonts folder           fonts for the PDF, before the system's
-Data is read from stdin when its file is "-".`;
+Data is read from stdin when its file is "-". A picture ({{logo | image}}) may be given as the
+path of a file, from the folder of the data, or as an address on the web, which is fetched.`;
 
 export interface Answer {
   out: string;
@@ -65,6 +66,14 @@ export function nameFor(pattern: string, data: Record<string, unknown>): string 
     return String(value ?? '').replace(/[/\\:*?"<>|]/g, '-') || 'untitled';
   });
 }
+
+/** A problem as a person reads it; a picture that is not one, with what a picture may be given as. */
+const problemText = (problem: { name: string; format: string; kind: string }, pictures: string[]) =>
+  problem.kind === 'format'
+    ? `no format "${problem.format}"`
+    : pictures.includes(problem.name)
+      ? `${problem.name} is not a picture: give the path of a PNG, a JPEG or a GIF, or its address on the web`
+      : `${problem.name} cannot be written as ${problem.format}`;
 
 export async function run(args: string[], stdin: () => string = () => readFileSync(0, 'utf8')): Promise<Answer> {
   const { words, flags } = parse(args);
@@ -102,6 +111,14 @@ export async function run(args: string[], stdin: () => string = () => readFileSy
     return { out: '', err: `The data is not JSON: ${(error as Error).message}`, code: 1 };
   }
 
+  // Pictures given as paths, from the folder of the data, and as addresses on the web, made ready.
+  const from = dataPath === '-' ? process.cwd() : dirname(resolve(dataPath));
+  const readPicture = (value: string) => {
+    const path = resolve(from, value);
+    return /\.(png|jpe?g|gif)$/i.test(value) && existsSync(path) ? new Uint8Array(readFileSync(path)) : undefined;
+  };
+  records = await Promise.all(records.map((data) => fetchPictures(template, resolvePictures(template, data, readPicture))));
+
   if (command === 'check') {
     const lines: string[] = [];
     let ok = true;
@@ -110,7 +127,7 @@ export async function run(args: string[], stdin: () => string = () => readFileSy
       ok &&= result.ok;
       const where = many ? `line ${i + 1}: ` : '';
       for (const path of result.missing) lines.push(`${where}missing ${path}`);
-      for (const problem of result.problems) lines.push(`${where}${problem.kind === 'format' ? `no format "${problem.format}"` : `${problem.name} cannot be written as ${problem.format}`}`);
+      for (const problem of result.problems) lines.push(`${where}${problemText(problem, template.pictures)}`);
     });
     return { out: ok ? 'Everything the template asks for is there.' : lines.join('\n'), err: '', code: ok ? 0 : 1 };
   }

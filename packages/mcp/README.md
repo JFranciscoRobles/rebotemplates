@@ -35,6 +35,10 @@ for PDFs. Nothing is read or written outside them.
 | `render_document` | The template filled, as a .docx or a PDF, written in the folder. Never over a file unless `overwrite`. |
 | `make_template` | A finished document turned into a template, as a new file: texts that become variables, a row of a table or paragraphs repeated for each item of a list, paragraphs or a text inside one kept only when a value is there. `dry_run` shows it without writing. |
 
+A picture (`{{logo | image}}`) is given to `render_document` and
+`check_data` as the path of a PNG, a JPEG or a GIF in the folders; nothing
+is fetched from the web.
+
 Each change of `make_template` is found by its exact text, and what is not
 found is said rather than guessed; a short text that is in several places
 is told apart by a longer one around it (`"in": "for 3 years"`). The

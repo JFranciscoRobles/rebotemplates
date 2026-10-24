@@ -14,6 +14,19 @@ values missing, dates), the names and defaults of a generator (`render`,
 `inspect`, `check`, `toPdf`), finding fonts, the command line, the assistant's
 tools, the demo and the site.
 
+## Trying a change of Rebodocs here
+
+The tests run on the `@rebodocs/core` npm installed. To run them on a
+checkout of Rebodocs instead, its source and not a release:
+
+```bash
+REBODOCS=../docs npm test
+```
+
+A test that needs what Rebodocs has not published yet is skipped on the
+release and runs on the checkout (`test-templates/badge.test.ts`, for
+pictures, says how).
+
 ## Setting up
 
 ```bash
