@@ -17,7 +17,7 @@ const SYNTAX: [string, string][] = [
 /**
  * "Getting started": installing; writing a template in Word; rendering it in
  * Node, with values computed in code; the PDF; checking before sending; the
- * command line; the browser; and the repository.
+ * command line; an assistant; the browser; and the repository.
  */
 export function GettingStartedPage() {
   return (
@@ -146,8 +146,26 @@ npx @rebotemplates/cli render invoice.docx invoices.jsonl -o "invoices/{number}.
         </p>
       </section>
 
+      <section aria-labelledby="assistant" className="mt-20">
+        <SectionHead id="assistant" badge="7" color="orange" title="With an assistant">
+          {code('@rebotemplates/mcp')} gives Claude, or any client of the Model Context Protocol, a folder of templates: to list them, fill them, and turn a finished document into a new one.
+        </SectionHead>
+        <Code lang="json">{`{
+  "mcpServers": {
+    "rebotemplates": {
+      "command": "npx",
+      "args": ["-y", "@rebotemplates/mcp", "--dir", "/Users/me/templates"]
+    }
+  }
+}`}</Code>
+        <p className={PROSE}>
+          In {code('claude_desktop_config.json')}. Then ask: <em>“Turn invoice-0142.docx into a template”</em>. Claude reads the invoice, proposes which texts become variables, which row repeats and
+          which paragraph depends on a value, shows the template with {code('dry_run')}, and writes it as a new file once you agree. The invoice itself is not changed.
+        </p>
+      </section>
+
       <section aria-labelledby="browser" className="mt-20">
-        <SectionHead id="browser" badge="7" color="orange" title="In the browser">
+        <SectionHead id="browser" badge="8" color="purple" title="In the browser">
           {code('@rebotemplates/core')} has no DOM and no Node: it fills templates in a page or a Worker as on a server. The demo of the home page is it, filling the invoice on every keystroke.
         </SectionHead>
       </section>

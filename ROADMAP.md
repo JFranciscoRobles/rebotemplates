@@ -132,7 +132,8 @@ The same rules:
 
 Taken on October 24, 2026, by running `npm test`, every one passing:
 
-- `packages/core` · 14 · Values missing (marked, empty, kept, a whole object, a block), 0 and false as values, computed values for each item and for the whole, lists inside lists, dates, `check`, `inspect`, a template read once.
+- `packages/mcp` · 11 · The protocol, listing, inspecting with data to fill in, checking, rendering a .docx and a PDF, paths outside the folder refused, a finished invoice turned into a template that makes the same documents as the one it came from, what is not found said.
+- `packages/core` · 15 · Values missing (marked, empty, kept, a whole object, a block), 0 and false as values, computed values for each item and for the whole, lists inside lists, dates, `check` (a whole object missing included), `inspect`, a template read once.
 - `packages/pdf` · 2 · The invoice as a PDF, and the families no font was found for.
 - `packages/cli` · 6 · `inspect`, `check`, `render` from stdin, one document per line, `--strict`, names of files.
 - `test-templates` · 10 · The invoice, a contract and a letter rendered and their text read back from the DOCX: rows of a table, paragraphs that repeat, clauses kept and left out, a clause in two versions, dates and names formatted, a letter written in Spanish with its formats named in Spanish. And a template as Word writes one, its XML made by hand: variables and the marks of blocks cut into runs, spelling marks and a bookmark between them, part of a name in bold.
@@ -146,6 +147,8 @@ Taken on October 24, 2026, by running `npm test`, every one passing:
 ### By hand
 
 The invoice rendered from the command line to a PDF, and the PDF looked at: the heading, PAID, the table with a row per item, the total.
+
+The MCP server installed from its tarball in an empty project and spoken to over standard input and output, as Claude Desktop does: initialize, the tools listed, the templates listed, a PDF rendered; nothing but the protocol on standard output.
 
 The demo driven in Chrome: the document filled again as the JSON changes (PAID, an item added, the total), a value missing marked, a JSON broken keeping the last document, a PDF made in the page with Carlito and looked at, a .docx made. The landing built as plain files and seen at the width of a desktop and of a phone, the demo working in its frame, with no errors in the page and no sideways scroll.
 
@@ -222,10 +225,13 @@ in `apps/site/lib/home.ts` (CONTRIBUTING.md, "Publishing").
 
 ### 0.3.0 · Assistants
 
-10. **`mcp`:** a folder of templates: list, inspect, check, render.
-11. **A `.docx` turned into a template:** the assistant reads it, proposes
+Built before 0.2, which waits on Rebodocs.
+
+10. ✅ **`mcp`:** a folder of templates: list, inspect, check, render.
+11. ✅ **A `.docx` turned into a template:** the assistant reads it, proposes
     which texts are variables, and marks them; the person sees the changes
-    before they are kept. What the landing's announcement says.
+    before they are kept (`dry_run`), and the template is a new file. A row
+    of a table repeats; paragraphs of a list do not yet.
 
 ### 0.4.0 · Where it runs
 

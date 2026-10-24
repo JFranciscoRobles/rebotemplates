@@ -15,7 +15,7 @@ for Calibri, whose measures it has. The panes draw the documents as HTML
 (`src/DocView.tsx`): their text and tables, not Word's layout, which the PDF
 has.
 
-Claude's card says what the MCP tools, coming in 0.3, will do; nothing is
-asked of an assistant here. `?claude=0` leaves it out.
+Claude's card says what `make_template` of `@rebotemplates/mcp` does to a
+finished invoice; nothing is asked of an assistant here. `?claude=0` leaves it out.
 
 `Demo` is the component the landing puts in its frame.

@@ -17,6 +17,7 @@ const BY_HAND: ReactNode[] = [
   'The invoice rendered from the command line to a PDF, and the PDF looked at: the heading, PAID, the table with a row per item, the total.',
   'The demo driven in Chrome: the document filled again as the JSON changes, a value missing marked, a JSON broken keeping the last document, a PDF made in the page with Carlito and looked at, a .docx made.',
   'This site built as plain files and seen at the width of a desktop and of a phone, the demo working in its frame.',
+  'The MCP server installed from its tarball and spoken to over standard input and output, as Claude Desktop does: the tools listed, a PDF rendered, nothing but the protocol on standard output.',
 ];
 
 const NOT: [string, ReactNode][] = [
@@ -53,9 +54,9 @@ const ASKED: [string, string][] = [
 ];
 
 const ROADMAP: [string, string][] = [
-  ['Getting started and this page.', 'The last of 0.1, with the packages published to npm.'],
+  ['Publishing 0.1 to npm,', 'with the MCP server of 0.3 in it.'],
+  ['Paragraphs that repeat, made from a document:', 'make_template turns a row of a table into one that repeats; a list of clauses or deliverables next.'],
   ['Pictures, in Rebodocs first:', '{{logo | image}} in the engine, shown and filled in the Rebodocs editor too; the letter of the tests gets its logo. 0.2.'],
-  ['Assistants:', 'an MCP server over a folder of templates, and a .docx turned into a template by marking its variables, the person seeing the changes before they are kept. 0.3.'],
   [
     'Where it runs, measured:',
     'a Worker, a Vercel function and a Lambda rendering the invoice, with their cold starts here; a container image of the server; free fonts for servers without any. 0.4.',

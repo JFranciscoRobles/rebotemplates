@@ -1,0 +1,19 @@
+{
+  "name": "@rebotemplates/mcp",
+  "version": "0.1.0",
+  "description": "A folder of Word templates for an AI assistant: list, inspect, check and render them, and turn a finished .docx into a template. An MCP server, over standard input and output.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/server.ts"
+  },
+  "dependencies": {
+    "@rebodocs/core": "~0.10.0",
+    "@rebotemplates/core": "0.1.0",
+    "@rebotemplates/pdf": "0.1.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  }
+}

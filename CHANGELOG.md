@@ -48,6 +48,15 @@ Takes `@rebodocs/core` 0.10.
   with the tests, timings and size as they were taken
   (`components/docs/status/`, as Rebodocs'). The landing's links go there.
 
+- **`@rebotemplates/mcp`**, an MCP server over a folder of templates:
+  `list_templates`, `inspect_template` (with data of the right shape to fill
+  in), `check_data`, `render_document` (.docx or PDF, never over a file
+  unless asked), and `make_template`, which turns a finished document into a
+  template as a new file: texts become variables, a row of a table repeats
+  for each item of a list, paragraphs are kept only when a value is there;
+  `dry_run` shows it first. JSON-RPC over standard input and output, as
+  Rebodocs' server speaks it, with no SDK. `npm run mcp -- --dir folder`.
+
 ### Changed
 
 - A block the data names as `null`, `false` or `''` is no longer said to be
@@ -61,3 +70,4 @@ Takes `@rebodocs/core` 0.10.
 - **`check` and a whole object missing.** A value inside an object the data
   does not have (`client.name` with no `client`) is said to be missing by
   `check` too, as `render` already said it.
+

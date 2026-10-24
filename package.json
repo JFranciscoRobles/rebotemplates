@@ -26,7 +26,8 @@
     "cli": "vite-node tools/cli.ts --",
     "sample": "vite-node tools/sample.ts --",
     "size": "vite-node tools/size.ts",
-    "build:packages": "npm run build -w @rebotemplates/core -w @rebotemplates/pdf -w @rebotemplates/cli"
+    "build:packages": "npm run build -w @rebotemplates/core -w @rebotemplates/pdf -w @rebotemplates/cli -w @rebotemplates/mcp",
+    "mcp": "vite-node packages/mcp/src/main.ts --"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

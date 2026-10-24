@@ -13,7 +13,7 @@ Word, so a template made here opens in the Rebodocs editor with its
 variables, and one made there renders here. No headless browser, no
 LibreOffice.
 
-It is early: `core`, `pdf`, `cli`, the demo and the landing are written and tested, nothing is on
+It is early: `core`, `pdf`, `cli`, `mcp`, the demo and the landing are written and tested, nothing is on
 npm yet. [ROADMAP.md](ROADMAP.md) says what was decided, what is next and
 what is checked.
 
@@ -75,8 +75,7 @@ out quietly, as a postscript a letter may not have.
 | [`@rebotemplates/core`](packages/core) | `render`, `inspect`, `check`, `fill`, with values computed in code. | Anywhere, no DOM |
 | [`@rebotemplates/pdf`](packages/pdf) | `toPdf`, with fonts given or found on the system. | Node |
 | [`@rebotemplates/cli`](packages/cli) | `render`, `inspect` and `check` from the command line, one document or one per line of a JSON lines file. | CLI |
-
-`mcp` follows; see the roadmap.
+| [`@rebotemplates/mcp`](packages/mcp) | A folder of templates for an AI assistant, and a finished .docx turned into a template. | MCP |
 
 ## How fast, how big
 

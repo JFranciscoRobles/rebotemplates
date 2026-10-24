@@ -90,7 +90,7 @@ function Hero() {
 
       <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface py-1.5 pl-2 pr-3.5 text-sm text-muted">
         <span className="rounded-full border border-border bg-white px-2 py-0.5 text-xs font-semibold text-ink">New</span>
-        The same templates the Rebodocs editor opens
+        Claude turns any .docx into a template through MCP
       </p>
       <h1 className="mx-auto mt-7 max-w-[900px] text-balance font-display text-[clamp(44px,6.6vw,84px)] font-extrabold leading-[1.04] tracking-[-0.03em]">
         The document generator you{' '}
@@ -147,7 +147,7 @@ export default async function Home() {
             <LiveDemo />
           </div>
           <p className="mt-8 text-center text-[15px] text-muted">
-            Claude’s card shows what the MCP tools, coming in 0.3, will do. Same templates, from your own API →{' '}
+            Claude’s card is what make_template does, through MCP. Same templates, from your own API →{' '}
             <a href={DOCS} className="font-medium text-brand hover:text-brand-hover">
               see the server guide
             </a>
@@ -194,7 +194,7 @@ export default async function Home() {
                   See them on npm →
                 </a>
               ) : (
-                'Three are written; none is on npm yet.'
+                'All four are written; none is on npm yet.'
               )}
             </p>
           </div>

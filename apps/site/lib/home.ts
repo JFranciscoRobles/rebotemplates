@@ -26,7 +26,20 @@ export const PASTEL_CLASS: Record<Pastel, string> = {
 export const pastelAt = (i: number) => PASTELS[i % PASTELS.length];
 
 /** What it does today; what is coming is said on its feature, not here. */
-export const TAGS = ['Designed in Word', 'Variables', 'Loops & tables', 'Conditions', 'Formatters', 'Computed values', 'DOCX out', 'PDF out', 'Checked before you send', 'CLI', 'Free for any company'];
+export const TAGS = [
+  'Designed in Word',
+  'Variables',
+  'Loops & tables',
+  'Conditions',
+  'Formatters',
+  'Computed values',
+  'DOCX out',
+  'PDF out',
+  'Checked before you send',
+  'CLI',
+  'Claude via MCP',
+  'Free for any company',
+];
 
 export interface Package {
   name: string;
@@ -55,11 +68,11 @@ export const PACKAGES: Package[] = [
     what: 'Tools for an AI assistant to make templates and generate documents: an MCP server for Claude Desktop and other clients.',
     tag: 'MCP',
     color: 'orange',
-    comes: '0.3',
+    command: 'npx @rebotemplates/mcp --dir ./templates',
   },
 ];
 /** In the order of the install picker: the one an application installs first. */
-export const INSTALL_ORDER = ['@rebotemplates/core', '@rebotemplates/pdf', '@rebotemplates/cli'];
+export const INSTALL_ORDER = ['@rebotemplates/core', '@rebotemplates/pdf', '@rebotemplates/cli', '@rebotemplates/mcp'];
 export const commandOf = (name: string) => PACKAGES.find((pkg) => pkg.name === name)?.command ?? `npm install ${name}`;
 
 export const npmOf = (name: string) => `https://www.npmjs.com/package/${name}`;
@@ -89,5 +102,5 @@ export const FEATURES: [string, string, string, string?][] = [
   ['Fast and small', 'A .docx in under a millisecond and a PDF in a few; 47 KB gzipped, engine included, for a serverless function. Measured.', 'M13 2 3 14h9l-1 8 10-12h-9z'],
   ['Checked before you send', 'List every variable a template expects, and get a clear error for each one the data is missing.', 'M20 6 9 17l-5-5'],
   ['Command line', 'Generate a folder of documents from a JSON lines file, for one-off jobs and scripts.', 'M4 17l6-6-6-6M12 19h8'],
-  ['AI assistants', 'Claude turns a finished .docx into a template and generates documents from data, through MCP.', 'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z', '0.3'],
+  ['AI assistants', 'Claude turns a finished .docx into a template and generates documents from data, through MCP.', 'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z'],
 ];

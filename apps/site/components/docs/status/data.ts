@@ -9,8 +9,13 @@ export const MEASURED = 'October 24, 2026';
 export const TESTS: { where: string; count: number; what: string }[] = [
   {
     where: 'packages/core',
-    count: 14,
+    count: 15,
     what: 'Values missing (marked, empty, kept, a whole object, a block), 0 and false as values, computed values for each item and for the whole, lists inside lists, dates, check, inspect, a template read once.',
+  },
+  {
+    where: 'packages/mcp',
+    count: 11,
+    what: 'The protocol; listing, inspecting, checking and rendering; paths outside the folder refused; a finished invoice turned into a template that makes the same documents.',
   },
   {
     where: 'test-templates',
