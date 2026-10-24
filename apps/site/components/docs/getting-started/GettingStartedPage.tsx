@@ -12,6 +12,7 @@ const SYNTAX: [string, string][] = [
   ['{{#items}} … {{/items}}', 'Repeated for each item of a list: text, a row of a table, or paragraphs, by where the marks are. Inside, {{items.name}}.'],
   ['{{#paid}} … {{/paid}}', 'Kept when the value is there: not empty, not false, not 0.'],
   ['{{^paid}} … {{/paid}}', 'Kept when it is not.'],
+  ['{{logo | image: 4cm}}', 'A picture, at the width given or its own, never wider than the text: its value the bytes of a PNG, a JPEG or a GIF, a path, an address on the web, or a data: address.'],
 ];
 
 /**

@@ -14,37 +14,37 @@ export const TESTS: { where: string; count: number; what: string }[] = [
   },
   {
     where: 'packages/mcp',
-    count: 12,
+    count: 13,
     what: 'The protocol; listing, inspecting, checking and rendering; paths outside the folder refused; a finished invoice and a finished contract turned into templates that make the same documents.',
   },
   {
     where: 'test-templates',
-    count: 10,
-    what: 'An invoice, a contract and a letter in Spanish rendered and read back from the DOCX; a template as Word writes one, its variables cut into runs.',
+    count: 13,
+    what: 'An invoice, a contract and a letter in Spanish rendered and read back from the DOCX; a template as Word writes one, its variables cut into runs; a badge with a logo in its header and a photo in each row.',
   },
-  { where: 'packages/cli', count: 6, what: 'inspect, check, render from stdin, one document per line, --strict, names of files.' },
-  { where: 'packages/pdf', count: 2, what: 'The invoice as a PDF, and the families no font was found for.' },
+  { where: 'packages/cli', count: 7, what: 'inspect, check, render from stdin, one document per line, --strict, names of files.' },
+  { where: 'packages/pdf', count: 3, what: 'The invoice as a PDF, the families no font was found for, and pictures drawn in it.' },
 ];
 
 /** `npm run bench`: the invoice. */
 export const BENCH = {
   machine: 'an Apple M1 with Node 22',
   rows: [
-    ['DOCX, from a template loaded once', '0.7 ms', '1.0 ms'],
-    ['DOCX, from the template’s bytes', '1.1 ms', '1.6 ms'],
-    ['PDF, from a template loaded once', '3.3 ms', '5.3 ms'],
+    ['DOCX, from a template loaded once', '0.7 ms', '0.9 ms'],
+    ['DOCX, from the template’s bytes', '1.2 ms', '1.6 ms'],
+    ['PDF, from a template loaded once', '4.4 ms', '5.5 ms'],
     ['The first render of a process', '15 ms', ''],
   ] as [string, string, string][],
   docx: '0.7 ms',
-  pdf: '3.3 ms',
+  pdf: '4.4 ms',
 };
 
 /** `npm run size`: minified for the browser, Rebodocs' engine in it. */
 export const SIZE = {
-  min: '150 KB',
-  gzip: '47 KB',
+  min: '155 KB',
+  gzip: '49 KB',
   rows: [
-    ['render (all of core)', '150 KB', '47 KB'],
-    ['filling and the PDF', '196 KB', '62 KB'],
+    ['render (all of core)', '155 KB', '49 KB'],
+    ['filling and the PDF', '201 KB', '64 KB'],
   ] as [string, string, string][],
 };

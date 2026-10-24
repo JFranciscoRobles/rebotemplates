@@ -130,9 +130,9 @@ The same rules:
 
 ## What is checked
 
-Taken on October 24, 2026, by running `npm test`, every one passing:
+Taken on October 24, 2026, by running `npm test`, every one passing, on `@rebodocs/core` 0.11:
 
-- `test-templates/badge` · 3, of which 2 need Rebodocs with pictures and run on its checkout · The logo in the header and a photo in each row, from their bytes, paths or addresses; a picture that is not one said.
+- `test-templates/badge` · 3 · The logo in the header and a photo in each row, from their bytes, paths or addresses; a picture that is not one said.
 - `packages/mcp` · 12 · The protocol, listing, inspecting with data to fill in, checking, rendering a .docx and a PDF, paths outside the folder refused, a finished invoice and a finished contract each turned into a template that makes the same documents as the one it came from, what is not found said.
 - `packages/core` · 15 · Values missing (marked, empty, kept, a whole object, a block), 0 and false as values, computed values for each item and for the whole, lists inside lists, dates, `check` (a whole object missing included), `inspect`, a template read once.
 - `packages/pdf` · 2 · The invoice as a PDF, and the families no font was found for.
@@ -141,9 +141,9 @@ Taken on October 24, 2026, by running `npm test`, every one passing:
 
 ### How fast and how big
 
-`npm run bench`, Apple M1, Node 22.23: the invoice to DOCX in 0.7 ms (median, p95 1.0 ms) from a template loaded once and 1.1 ms from its bytes; to PDF in 3.3 ms (p95 5.3 ms); the first render of a process, 15 ms.
+`npm run bench`, Apple M1, Node 22.23: the invoice to DOCX in 0.7 ms (median, p95 0.9 ms) from a template loaded once and 1.2 ms from its bytes; to PDF in 4.4 ms (p95 5.5 ms); the first render of a process, 15 ms. With Rebodocs 0.11; with 0.10, the PDF took 3.3 ms.
 
-`npm run size`, minified for the browser, Rebodocs' engine in it: `render` 150 KB (47 KB gzipped); filling and the PDF, 196 KB (62 KB gzipped).
+`npm run size`, minified for the browser, Rebodocs' engine in it: `render` 155 KB (49 KB gzipped); filling and the PDF, 201 KB (64 KB gzipped).
 
 ### By hand
 
@@ -177,7 +177,6 @@ Known from the start, as they are Rebodocs':
 
 What ReboTemplates needs and `@rebodocs/core` does not have in its public API:
 
-- ~~**`{{name | image}}`**~~, written there; to be published.
 - **The font families a document uses**, as `resolveRun` knows them (it is
   internal), so a PDF is laid out once.
 - **A format of colour**, to mark a value missing in pink as the demo does.
@@ -222,15 +221,13 @@ in `apps/site/lib/home.ts` (CONTRIBUTING.md, "Publishing").
    value a `data:` address; a width (`image: 4cm`) or its own size, never
    wider than the text; one per item of a block; in headers and footers; the
    same picture kept once. Filled in the Rebodocs editor too, as it fills
-   with the same function. Written and tested in Rebodocs, not published.
+   with the same function. Published in Rebodocs 0.11.
 9. ✅ **ReboTemplates' side:** bytes, paths and addresses on the web made
    into `data:` addresses (`resolvePictures`, `fetchPictures`), in the
-   command line and the MCP server; `test-templates/badge.ts`. Its tests
-   run on a checkout of Rebodocs (`REBODOCS=../docs npm test`) and are
-   skipped on the release.
+   command line and the MCP server; `test-templates/badge.ts`.
 
-What is left: Rebodocs published with pictures, `@rebodocs/core` asked for
-at that version here, and "Coming in 0.2" taken off the landing's Images.
+Rebodocs 0.11 is published with them, and ReboTemplates takes it: every
+test of pictures runs on the release.
 
 ### 0.3.0 · Assistants
 

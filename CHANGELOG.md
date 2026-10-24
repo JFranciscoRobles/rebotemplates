@@ -7,7 +7,7 @@ listed under **Changed** with what to do about them.
 
 ## Unreleased
 
-Takes `@rebodocs/core` 0.10.
+Takes `@rebodocs/core` 0.11.
 
 ### Added
 
@@ -64,8 +64,8 @@ Takes `@rebodocs/core` 0.10.
   elsewhere by a longer one around it (`in`). A finished contract turned into
   a template makes the same contracts as the one it came from.
 
-- **Pictures**, `{{logo | image}}`, made in Rebodocs first: they need the
-  `@rebodocs/core` that comes after 0.10. Here, a picture may be given as its
+- **Pictures**, `{{logo | image}}`, made in Rebodocs first and published in
+  its 0.11. Here, a picture may be given as its
   bytes, which `render` and `check` turn into a `data:` address;
   `resolvePictures` loads them from paths (or anything else, with a loader of
   one's own) and `fetchPictures` from the web. `inspect` says which variables

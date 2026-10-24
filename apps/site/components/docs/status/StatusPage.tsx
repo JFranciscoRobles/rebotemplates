@@ -31,10 +31,7 @@ const LIMITS: { area: string; color: Pastel; items: ReactNode[] }[] = [
   {
     area: 'Templates',
     color: 'blue',
-    items: [
-      <>Pictures ({code('{{logo | image}}')}) are written, in Rebodocs first, and come out with its next version.</>,
-      'No expressions in the document: values are worked out in code, with computed.',
-    ],
+    items: [<>Pictures are PNG, JPEG or GIF; SVG and WebP are not taken.</>, 'No expressions in the document: values are worked out in code, with computed.'],
   },
   {
     area: 'Data',
@@ -51,14 +48,12 @@ const LIMITS: { area: string; color: Pastel; items: ReactNode[] }[] = [
 
 /** What ReboTemplates needs and the public API of @rebodocs/core does not have. */
 const ASKED: [string, string][] = [
-  ['Pictures as a format,', '{{name | image}}: written and tested there, to be published. ReboTemplates’ side is ready.'],
   ['The font families a document uses,', 'as Rebodocs’ resolveRun knows them, so a PDF is laid out once.'],
   ['A format of colour,', 'to mark a value missing in pink, as the demo does.'],
 ];
 
 const ROADMAP: [string, string][] = [
   ['Publishing 0.1 to npm,', 'with the MCP server of 0.3 in it.'],
-  ['Pictures, out with the next Rebodocs:', '{{logo | image}} is written in the engine and here; it is published when Rebodocs is. 0.2.'],
   [
     'Where it runs, measured:',
     'a Worker, a Vercel function and a Lambda rendering the invoice, with their cold starts here; a container image of the server; free fonts for servers without any. 0.4.',

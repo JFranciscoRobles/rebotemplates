@@ -9,7 +9,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@rebodocs/core": "~0.10.0",
+    "@rebodocs/core": "~0.11.0",
     "@rebotemplates/core": "0.1.0"
   },
   "scripts": {

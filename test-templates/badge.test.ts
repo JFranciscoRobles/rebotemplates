@@ -1,6 +1,6 @@
 // Pictures in a template: the logo in the header and a photo for each person.
-// They need a Rebodocs whose templates take pictures (0.11 on); with an older
-// one these are skipped, and run with REBODOCS=../docs npm test.
+// They need a Rebodocs whose templates take pictures, 0.11 on; the check below
+// skips them on an older one, as on a checkout tried before it is published.
 
 import { describe, expect, it } from 'vitest';
 import { type Doc, docText, formatValue, importDocx } from '@rebodocs/core';

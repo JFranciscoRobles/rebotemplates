@@ -103,7 +103,7 @@ function Hero() {
         your app.
       </h1>
       <p className="mx-auto mt-7 max-w-[640px] text-[19px] leading-[1.6] text-muted">
-        Design the template in Word, send JSON, get back a .docx or a PDF. Variables, repeating tables, conditions and formats — rendered on your server in milliseconds, free for any company.
+        Design the template in Word, send JSON, get back a .docx or a PDF. Variables, repeating tables, conditions and images — rendered on your server in milliseconds, free for any company.
       </p>
       <p className="mt-8 flex flex-wrap justify-center gap-2.5 text-base">
         <a href={DOCS} className={`rounded-xl px-5.5 py-3.5 ${primary}`}>
@@ -241,7 +241,7 @@ export default async function Home() {
             <div className="min-w-0 flex-[1_1_340px]">
               <span className="rounded-full bg-white px-3 py-[5px] text-[13px] font-semibold text-pastel-yellow-fg">Where it stands</span>
               <p className="mt-4.5 font-display text-[clamp(48px,6vw,76px)] font-extrabold leading-[1.02] tracking-[-0.03em]">No paid modules.</p>
-              <p className="mt-3 font-hand text-[26px] font-semibold text-pastel-yellow-fg">loops, conditions and PDF included</p>
+              <p className="mt-3 font-hand text-[26px] font-semibold text-pastel-yellow-fg">loops, images and PDF included</p>
             </div>
             <div className="min-w-0 flex-[1_1_380px]">
               <p className="font-display text-[clamp(24px,2.6vw,32px)] font-bold leading-[1.3] tracking-[-0.03em]">Free for any company. No strings.</p>

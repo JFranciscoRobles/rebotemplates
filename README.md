@@ -62,7 +62,7 @@ The Rebodocs syntax, the same in every product of the suite.
 | `{{#items}} … {{/items}}` | Repeated for each item of a list: text, a row of a table, or paragraphs, by where the marks are. Inside, `{{items.name}}`. |
 | `{{#paid}} … {{/paid}}` | Kept when the value is there: not empty, not false, not 0. |
 | `{{^paid}} … {{/paid}}` | Kept when it is not. |
-| `{{logo \| image: 4cm}}` | A picture, at the width given or its own; its value the bytes of a PNG, a JPEG or a GIF, or a `data:` address. Needs `@rebodocs/core` 0.11. |
+| `{{logo \| image: 4cm}}` | A picture, at the width given or its own; its value the bytes of a PNG, a JPEG or a GIF, a path or a URL (`resolvePictures`, `fetchPictures`), or a `data:` address. |
 
 A value the data lacks shows as `[path]` in the document, and `render` says
 which (`missing: 'empty'` or `'keep'` to do otherwise). A block the data does
@@ -81,11 +81,11 @@ out quietly, as a postscript a letter may not have.
 ## How fast, how big
 
 `npm run bench`, on an Apple M1 with Node 22, the invoice above: a .docx in
-0.7 ms (median) from a template loaded once, 1.1 ms from its bytes, a PDF in
-3.3 ms; the first render of a process, 15 ms.
+0.7 ms (median) from a template loaded once, 1.2 ms from its bytes, a PDF in
+4.4 ms; the first render of a process, 15 ms.
 
 `npm run size`, minified for the browser with Rebodocs' engine in it:
-`render` is 150 KB (47 KB gzipped); filling and the PDF, 196 KB (62 KB).
+`render` is 155 KB (49 KB gzipped); filling and the PDF, 201 KB (64 KB).
 
 Templates saved by Word cut a `{{variable}}` into pieces, with spelling marks
 and bookmarks between them; they are read whole (`test-templates/word.ts`).
